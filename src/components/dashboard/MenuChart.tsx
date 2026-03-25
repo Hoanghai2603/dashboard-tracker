@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
-import SparklineChart from './SparklineChart'
 import type { TokenPriceData } from '@/services/coingeckoService/coingeckoService'
+import { formatPercentage } from '@/utils/utils'
+import React, { useState } from 'react'
+import SparklineChart from './SparklineChart'
 
 interface MenuChartProps {
   data: TokenPriceData[]
@@ -81,8 +82,7 @@ const MenuChart: React.FC<MenuChartProps> = ({ data, isLoading }) => {
             <div
               className={`text-sm font-medium flex items-center justify-end gap-1 ${selectedToken?.price_change_percentage_24h || 0 >= 0 ? 'text-green-500' : 'text-red-500'}`}
             >
-              {selectedToken?.price_change_percentage_24h || 0 >= 0 ? '+' : ''}
-              {(selectedToken?.price_change_percentage_24h || 0).toFixed(2)}%
+              {formatPercentage(Number(selectedToken?.price_change_percentage_24h))}
             </div>
           </div>
         </div>
@@ -167,8 +167,7 @@ const MenuChart: React.FC<MenuChartProps> = ({ data, isLoading }) => {
                           : 'text-red-500'
                     }`}
                   >
-                    {isPositive ? '+' : ''}
-                    {token.price_change_percentage_24h?.toFixed(2)}%
+                    {formatPercentage(Number(token?.price_change_percentage_24h))}
                   </p>
                 </div>
               </button>
