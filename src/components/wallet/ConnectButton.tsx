@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { SUPPORTED_CHAIN_ID } from '@/constants'
 import { useWallet } from '@/hooks/useWallet'
 import { useWalletActions } from '@/hooks/useWalletActions'
 import React, { useState } from 'react'
@@ -18,8 +17,8 @@ import { formatUnits } from 'viem'
 import { formatNumber } from '@/utils/utils'
 import { CopyButton } from '../ui/copy-button'
 const ConnectButtonTemp: React.FC = () => {
-  const { isConnected, chainId, shortenAddress, balance, address } = useWallet()
-  const { connectors, isPending, connect, disconnect, switchChain } = useWalletActions()
+  const { isConnected, shortenAddress, balance, address } = useWallet()
+  const { connectors, isPending, connect, disconnect } = useWalletActions()
   const [open, setOpen] = useState(false)
 
   const handleConnect = (connector: Connector) => {
@@ -57,22 +56,6 @@ const ConnectButtonTemp: React.FC = () => {
                 {balance ? `${formatNumber(Number(formatUnits(balance.value, balance.decimals)))} ${balance.symbol}` : '0.00'}
               </span>
             </div>
-
-            {chainId !== SUPPORTED_CHAIN_ID && (
-              <>
-                <DropdownMenuSeparator />
-                <div className="p-2">
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="w-full font-semibold"
-                    onClick={() => switchChain({ chainId: SUPPORTED_CHAIN_ID })}
-                  >
-                    Switch to Sepolia
-                  </Button>
-                </div>
-              </>
-            )}
 
             <DropdownMenuSeparator />
             <DropdownMenuItem
@@ -123,17 +106,7 @@ const ConnectButtonTemp: React.FC = () => {
     )
   }
 
-  return (
-    <div className="flex items-center gap-2">
-      {renderConnectButton()}
-
-      {isConnected && chainId !== SUPPORTED_CHAIN_ID && (
-        <Button variant="destructive" className="font-semibold" onClick={() => switchChain({ chainId: SUPPORTED_CHAIN_ID })}>
-          Switch to Sepolia
-        </Button>
-      )}
-    </div>
-  )
+  return <div className="flex items-center gap-2">{renderConnectButton()}</div>
 }
 
 export default ConnectButtonTemp

@@ -1,11 +1,11 @@
 import { Skeleton } from '@/components/ui/skeleton'
-import type { TokenPriceData } from '@/services/coingeckoService/coingeckoService'
+import type { TokenMarketData } from '@/api/external/coingecko'
 import { formatPercentage } from '@/utils/utils'
 import React, { useState } from 'react'
 import SparklineChart from './SparklineChart'
 
 interface MenuChartProps {
-  data: TokenPriceData[]
+  data: TokenMarketData[]
   isLoading?: boolean
 }
 
@@ -78,11 +78,11 @@ const MenuChart: React.FC<MenuChartProps> = ({ data, isLoading }) => {
             </div>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold">${selectedToken?.current_price.toLocaleString()}</div>
+            <div className="text-2xl font-bold">${selectedToken?.currentPrice.toLocaleString()}</div>
             <div
-              className={`text-sm font-medium flex items-center justify-end gap-1 ${selectedToken?.price_change_percentage_24h || 0 >= 0 ? 'text-green-500' : 'text-red-500'}`}
+              className={`text-sm font-medium flex items-center justify-end gap-1 ${selectedToken?.priceChange24h || 0 >= 0 ? 'text-green-500' : 'text-red-500'}`}
             >
-              {formatPercentage(Number(selectedToken?.price_change_percentage_24h))}
+              {formatPercentage(Number(selectedToken?.priceChange24h))}
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@ const MenuChart: React.FC<MenuChartProps> = ({ data, isLoading }) => {
         <div className="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1 max-h-[95%]">
           {data.map((token, index) => {
             const isSelected = actualSelectedTokenId === token.id
-            const isPositive = token.price_change_percentage_24h || 0 >= 0
+            const isPositive = token.priceChange24h >= 0
 
             return (
               <button
@@ -154,7 +154,7 @@ const MenuChart: React.FC<MenuChartProps> = ({ data, isLoading }) => {
 
                 <div className="text-right flex flex-col items-end relative z-10">
                   <p className={`font-semibold text-sm ${isSelected ? 'text-foreground' : 'text-foreground/90'}`}>
-                    ${token.current_price.toLocaleString(undefined, { maximumFractionDigits: token.current_price < 1 ? 4 : 2 })}
+                    ${token.currentPrice.toLocaleString(undefined, { maximumFractionDigits: token.currentPrice < 1 ? 4 : 2 })}
                   </p>
                   <p
                     className={`text-[11px] font-bold mt-1 tracking-wide px-1.5 py-0.5 rounded-md ${
@@ -167,7 +167,7 @@ const MenuChart: React.FC<MenuChartProps> = ({ data, isLoading }) => {
                           : 'text-red-500'
                     }`}
                   >
-                    {formatPercentage(Number(token?.price_change_percentage_24h))}
+                    {formatPercentage(Number(token?.priceChange24h))}
                   </p>
                 </div>
               </button>

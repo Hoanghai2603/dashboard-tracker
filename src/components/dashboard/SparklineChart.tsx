@@ -1,10 +1,10 @@
-import type { TokenPriceData } from '@/services/coingeckoService/coingeckoService'
+import type { TokenMarketData } from '@/api/external/coingecko'
 import { formatNumber } from '@/utils/utils'
 import React from 'react'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
 interface SparklineProps {
-  token?: TokenPriceData
+  token?: TokenMarketData
 }
 
 const formatYAxis = (value: number) => {
@@ -37,10 +37,11 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 const SparklineChart: React.FC<SparklineProps> = ({ token }) => {
-  if (!token || !token.sparkline_in_7d?.price) return null
+  if (!token || !token.sparkline) return null
+  if (token.sparkline.length === 0) return null
 
-  const rates = token.sparkline_in_7d.price
-  const isPositive = token.price_change_percentage_24h || 0 >= 0
+  const rates = token.sparkline
+  const isPositive = token.priceChange24h >= 0
   const color = isPositive ? '#22c55e' : '#ef4444'
 
   // CoinGecko trả về 168 điểm cho 7 ngày (mỗi điểm cách nhau 1 giờ)

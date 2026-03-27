@@ -1,9 +1,9 @@
 import { shortAddress } from '@/utils/utils'
-import { useBalance, useConnection } from 'wagmi'
+import { useBalance, useAccount } from 'wagmi'
 
 export const useWallet = () => {
-  const { address, isConnected, chainId, chain, isConnecting, isDisconnected, isReconnecting } = useConnection()
-  const { data } = useBalance({
+  const { address, isConnected, chainId, chain, isConnecting, isReconnecting } = useAccount()
+  const { data: balance, isLoading: isBalanceLoading } = useBalance({
     address,
     query: {
       enabled: !!address,
@@ -16,7 +16,8 @@ export const useWallet = () => {
     isConnected,
     chainId,
     chain,
-    isWalletLoading: isConnecting || isDisconnected || isReconnecting,
-    balance: data,
+    isWalletLoading: isConnecting || isReconnecting,
+    isBalanceLoading,
+    balance,
   }
 }
