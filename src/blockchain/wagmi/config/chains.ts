@@ -1,4 +1,4 @@
-import { sepolia, mainnet, bsc, bscTestnet, } from 'wagmi/chains'
+import { sepolia, mainnet, bsc, bscTestnet, avalanche, avalancheFuji, arbitrum, arbitrumSepolia } from 'wagmi/chains'
 
 const isProduction = import.meta.env.MODE === 'production'
 
@@ -12,7 +12,7 @@ const isProduction = import.meta.env.MODE === 'production'
  * import và thêm vào mảng tương ứng.
  */
 export const supportedChains = isProduction
-  ? [mainnet, bsc] as const
-  : [sepolia, bscTestnet] as const
+  ? ([mainnet, bsc, avalanche, arbitrum] as const)
+  : ([sepolia, bscTestnet, avalancheFuji, arbitrumSepolia] as const)
 
 export const defaultChain = isProduction ? mainnet : sepolia
